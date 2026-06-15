@@ -4,14 +4,7 @@
   ],
 
   "unicom": [
-    {
-      "name": "上海联通",
-      "id": 24447
-    },
-    {
-      "name": "北京联通",
-      "id": 43752
-    },
+    
     {
       "name": "上海联通（备用）",
       "id": 403958
@@ -128,23 +121,4 @@
       "id": 433656
     }
   ],
-
-  "taiwan": [
-    {
-      "name": "台北 Homeplus",
-      "id": 24462
-    },
-    {
-      "name": "台湾 Chief Telecom",
-      "id": 4938
-    },
-    {
-      "name": "台湾 Mobile",
-      "id": 11702
-    },
-    {
-      "name": "台湾 Chunghwa Mobile",
-      "id": 18452
-    }
-  ]
 }
