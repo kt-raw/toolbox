@@ -1,7 +1,7 @@
 #!/bin/bash
 #
 # VPS 三网测速系统
-# 基于 Ookla 官方 Speedtest CLI + GitHub 节点库
+# ivpsr.com
 # 支持三网测速 / 单节点测试 / 多节点批量测试
 #
 
@@ -275,10 +275,11 @@ test_multi_id() {
     echo ""
     echo "选择输入方式:"
     echo -e "  ${CYAN}1.${PLAIN} 手动输入 名称|ID"
-    echo -e "  ${CYAN}2.${PLAIN} 从节点库搜索（输入关键字匹配节点名）"
-    echo -e "  ${CYAN}3.${PLAIN} 测全部节点库节点（先快速存活检测，再完整测速）"
+    echo -e "  ${CYAN}2.${PLAIN} 批量粘贴 名称|ID（一次性粘贴多行）"
+    echo -e "  ${CYAN}3.${PLAIN} 从节点库搜索（输入关键字匹配节点名）"
+    echo -e "  ${CYAN}4.${PLAIN} 测全部节点库节点（先快速存活检测，再完整测速）"
     echo ""
-    read -rp "请选择 [1-3]: " mode
+    read -rp "请选择 [1-4]: " mode
 
     local nodes=()
 
@@ -299,6 +300,20 @@ test_multi_id() {
             done
             ;;
         2)
+            echo ""
+            echo "请粘贴 名称|ID 列表（每行一个），粘贴完成后按 Ctrl+D 结束："
+            echo "示例:"
+            echo "  上海电信|3633"
+            echo "  北京联通|5145"
+            echo ""
+            local line
+            while IFS= read -r line; do
+                line=$(echo "$line" | xargs)
+                [ -z "$line" ] && continue
+                nodes+=("$line")
+            done
+            ;;
+        3)
             echo ""
             read -rp "输入关键字（支持多个，空格分隔，如: 上海 杭州 广州）: " keywords
             [ -z "$keywords" ] && { echo -e "${YELLOW}[INFO] 未输入关键字${PLAIN}"; return; }
@@ -336,7 +351,7 @@ test_multi_id() {
             fi
             echo -e "${CYAN}[INFO] 共匹配 ${matched_count} 个节点${PLAIN}"
             ;;
-        3)
+        4)
             # 读取全部节点库，先快速存活检测
             echo ""
             echo -e "${CYAN}[INFO] 读取全部节点库...${PLAIN}"
