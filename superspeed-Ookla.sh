@@ -146,19 +146,32 @@ init_deps() {
 init_nodes() {
     echo -e "${CYAN}[2/3] 拉取节点库...${PLAIN}"
     local raw
-    raw=$(curl -s "$NODES_URL")
+    raw=$(curl -s --connect-timeout 10 --max-time 30 "$NODES_URL")
     if [ -z "$raw" ]; then
         echo -e "${RED}[ERROR] 节点库下载失败${PLAIN}"
-        exit 1
+        # 检查本地缓存
+        if [ -f "$NODES_JSON" ] && [ -s "$NODES_JSON" ]; then
+            echo -e "${YELLOW}[INFO] 使用本地缓存${PLAIN}"
+        else
+            echo -e "${RED}[ERROR] 无缓存可用，退出${PLAIN}"
+            exit 1
+        fi
+        return
     fi
-    if ! echo "$raw" | jq '.' > "$NODES_JSON" 2>/dev/null; then
-        echo -e "${RED}[ERROR] 节点库 JSON 格式错误，尝试使用缓存...${PLAIN}"
-        if [ ! -f "$NODES_JSON" ]; then
+    # 校验 JSON 格式
+    if echo "$raw" | jq '.' > "$NODES_JSON" 2>/dev/null; then
+        echo -e "${GREEN}[INFO] 节点库加载完成${PLAIN}"
+    else
+        echo -e "${RED}[ERROR] 节点库 JSON 格式错误${PLAIN}"
+        # 删除无效文件
+        rm -f "$NODES_JSON"
+        if [ -f "$NODES_JSON" ] && [ -s "$NODES_JSON" ]; then
+            echo -e "${YELLOW}[INFO] 使用本地缓存${PLAIN}"
+        else
             echo -e "${RED}[ERROR] 无缓存可用，退出${PLAIN}"
             exit 1
         fi
     fi
-    echo -e "${GREEN}[INFO] 节点库加载完成${PLAIN}"
 }
 
 ########## 核心测速 ##########
