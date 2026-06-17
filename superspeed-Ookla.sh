@@ -610,10 +610,9 @@ main_menu() {
 
 print_footer() {
     echo ""
-    echo -e "${GREEN}------------------------------------------------------------${PLAIN}"
     echo -e "${WHITE}系统时间：${PLAIN}${GREEN}$(date -u '+%Y-%m-%d %H:%M:%S')${PLAIN} ${WHITE}UTC${PLAIN}"
     echo -e "${WHITE}北京时间：${PLAIN}${GREEN}$(TZ='Asia/Shanghai' date '+%Y-%m-%d %H:%M:%S')${PLAIN} ${WHITE}CST${PLAIN}"
-    echo -e "${GREEN}------------------------------------------------------------${PLAIN}"
+    echo -e "${GREEN}---------------------------------------------------------------------------------${PLAIN}"
 }
 
 ########## 入口 ##########
